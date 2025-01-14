@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('categoria_id');
             $table->foreign('categoria_id')->references('id')->on('categorias');
 
-            $table->string('nombre')->comment('nombre del producto en el sistema');
+            $table->string('nombre')->unique()->comment('nombre del producto en el sistema');
             $table->longText('descripcion')->comment('Reseña del producto');
             $table->double('precio')->comment('precio de venta del producto');
 

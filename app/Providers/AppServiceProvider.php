@@ -3,7 +3,11 @@
 namespace App\Providers;
 
 use App\Contracts\CategoriaInterface;
+use App\Contracts\InventarioInterface;
+use App\Contracts\ProductoInterface;
 use App\Services\CategoriaService;
+use App\Services\InventarioService;
+use App\Services\ProductoService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -14,6 +18,8 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(CategoriaInterface::class, CategoriaService::class);
+        $this->app->bind(ProductoInterface::class, ProductoService::class);
+        $this->app->bind(InventarioInterface::class, InventarioService::class);
     }
 
     /**

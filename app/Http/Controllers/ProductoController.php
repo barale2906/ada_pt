@@ -2,47 +2,64 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\ProductoInterface;
+use App\Http\Requests\ProductoRequest;
+use App\Http\Requests\ProductoUpdateRequest;
+use App\Http\Resources\ProductoResource;
+use App\Models\Producto;
 use Illuminate\Http\Request;
 
 class ProductoController extends Controller
 {
+    protected $productoService;
+
+    public function __construct(ProductoInterface $productoService)
+    {
+        $this->productoService = $productoService;
+    }
+
     /**
-     * Display a listing of the resource.
+     * Muestra todas las productos
      */
     public function index()
     {
-        //
+        $productos = $this->productoService->obtenerTodos();
+        return ProductoResource::collection($productos);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Muestra la producto recien creada
      */
-    public function store(Request $request)
+    public function store(ProductoRequest $request)
     {
-        //
+        $producto = $this->productoService->guardar($request->validated());
+        return new ProductoResource($producto);
     }
 
     /**
-     * Display the specified resource.
+     * Muestra la producto especifica
      */
-    public function show(string $id)
+    public function show(Producto $producto)
     {
-        //
+        $producto = $this->productoService->obtenerPorId($producto->id);
+        return new ProductoResource($producto);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ProductoUpdateRequest $request, Producto $producto)
     {
-        //
+        $producto = $this->productoService->actualizar($producto->id, $request->validated());
+        return new ProductoResource($producto);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * elimina la producto seleccionada
      */
-    public function destroy(string $id)
+    public function destroy(Producto $producto)
     {
-        //
+        $this->productoService->eliminar($producto->id);
+        return response()->json($producto, 204);
     }
 }
